@@ -1,0 +1,5 @@
+org.napora.Xposed.G2.RecentApps.AlterSystemUIResources
+org.napora.Xposed.G2.RecentApps.ModNavBar
+org.napora.Xposed.G2.Declutter
+org.napora.Xposed.G2.EnableActionBarOverflowMenu
+org.napora.Xposed.G2.LongPressHomeForMenu
