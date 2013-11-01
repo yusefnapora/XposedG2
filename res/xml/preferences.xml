@@ -2,8 +2,8 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:key="@string/pref_key_nav_bar_category"
-        android:title="@string/pref_nav_bar_title">
+        android:key="@string/pref_key_soft_keys_category"
+        android:title="@string/pref_soft_keys_category">
         <ListPreference
             android:key="@string/pref_key_recent_apps_mod"
             android:title="@string/pref_recent_apps_mod"
@@ -18,14 +18,6 @@
             android:entries="@array/pref_long_press_behaviors"
             android:entryValues="@array/pref_long_press_behavior_values"
             android:defaultValue="@string/pref_value_long_press_home_default"/>
-        <ListPreference
-            android:key="@string/pref_key_nav_bar_size"
-            android:title="@string/pref_nav_bar_size"
-            android:summary="%s"
-            android:entries="@array/pref_navbar_size_entries"
-            android:entryValues="@array/pref_navbar_size_values"
-            android:defaultValue="@string/pref_value_navbar_size_default"/>
-
         <CheckBoxPreference
                 android:key="@string/pref_key_action_bar_overflow"
                 android:title="@string/pref_action_bar_overflow"
@@ -36,6 +28,13 @@
     <PreferenceCategory
             android:title="@string/pref_appearance_category"
             android:key="@string/pref_key_appearance_category">
+        <ListPreference
+                android:key="@string/pref_key_nav_bar_size"
+                android:title="@string/pref_nav_bar_size"
+                android:summary="%s"
+                android:entries="@array/pref_navbar_size_entries"
+                android:entryValues="@array/pref_navbar_size_values"
+                android:defaultValue="@string/pref_value_navbar_size_default"/>
         <CheckBoxPreference
             android:key="@string/pref_key_hide_am_pm"
             android:title="@string/pref_hide_am_pm"

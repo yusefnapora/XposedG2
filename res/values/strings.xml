@@ -4,7 +4,7 @@
     <string name="pref_hide_carrier_title">Hide Carrier Labels</string>
     <string name="pref_hide_carrier_in_panel">In Notification Panel</string>
     <string name="pref_hide_carrier_in_lockscreen">At Lock Screen</string>
-    <string name="pref_nav_bar_title">Navigation Bar</string>
+    <string name="pref_soft_keys_category">Onscreen Buttons</string>
     <string name="pref_recent_apps_mod">Recent Apps Key</string>
     <string name="pref_recent_apps_menu_key">Replace Menu Key with Recent Apps</string>
     <string name="pref_recent_apps_disabled">Don\'t Use Recent Apps Key (Default)</string>
@@ -52,7 +52,7 @@
     <string name="pref_key_hide_am_pm">pref_key_hide_am_pm</string>
     <string name="pref_key_black_status_bar">pref_key_black_status_bar</string>
     <string name="pref_key_black_nav_bar">pref_key_black_nav_bar</string>
-    <string name="pref_key_nav_bar_category">pref_key_nav_bar_category</string>
+    <string name="pref_key_soft_keys_category">pref_key_soft_keys_category</string>
     <string name="pref_key_recent_apps_mod">pref_key_recent_apps_mod</string>
     <string name="pref_key_long_press_home_behavior">pref_key_long_press_home_behavior</string>
     <string name="pref_key_nav_bar_size">pref_key_nav_bar_size</string>
