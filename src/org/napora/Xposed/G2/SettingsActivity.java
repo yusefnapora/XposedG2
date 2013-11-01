@@ -3,10 +3,10 @@ package org.napora.Xposed.G2;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+import android.preference.*;
 import android.widget.Toast;
+
+import java.io.File;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,6 +31,14 @@ public class SettingsActivity extends Activity  {
             addPreferencesFromResource(R.xml.preferences);
             PreferenceManager.getDefaultSharedPreferences(getActivity()).
                     registerOnSharedPreferenceChangeListener(this);
+
+            // Hide the pink -> black nav bar theme option if the pink theme doesn't exist (non-Verizon device)
+            File pinkTheme = new File("/system/app/SystemUI_Theme_Lovely_Pink.apk");
+            if (!pinkTheme.exists()) {
+                Preference pref = findPreference(getString(R.string.pref_key_black_nav_bar));
+                PreferenceCategory category = (PreferenceCategory)findPreference(getString(R.string.pref_key_appearance_category));
+                category.removePreference(pref);
+            }
         }
 
 

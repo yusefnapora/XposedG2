@@ -2,11 +2,15 @@ package org.napora.Xposed.G2;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.XModuleResources;
 import android.content.res.XResources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RotateDrawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
@@ -15,6 +19,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 
 import static de.robv.android.xposed.XposedHelpers.*;
@@ -23,13 +28,23 @@ import static de.robv.android.xposed.XposedHelpers.*;
  * Replace either the Menu key or Notification key with Recent Apps
  */
 public class RecentAppsKey {
-    public static void hookSystemUIResources(InitPackageResourcesParam resparam)
+    public static void hookSystemUIResources(InitPackageResourcesParam resparam, XModuleResources modRes)
             throws Throwable {
         if (!resparam.packageName.equals("com.android.systemui")) return;
 
         // Replace either the menu key or the notification key with recent apps
         final String replacementButtonName = Settings.recentAppsButtonReplacement();
         XposedBridge.log("Replacing " + replacementButtonName + " with recent_apps");
+
+        // we replace the animation resource for the button we're replacing with an animation resource for recents,
+        // pulled from our module resource bundle.  We need to replace an existing resource so we have a stable id
+        // to work with when modifying code later.
+
+        String animToReplaceName = "ic_sysbar_" + replacementButtonName + "_button_trans";
+        int animToReplaceId = resparam.res.getIdentifier(animToReplaceName, "anim", "com.android.systemui");
+        //int drawableToReplaceId = resparam.res.getIdentifier(animToReplaceName, "drawable", "com.android.systemui");
+        resparam.res.setReplacement(animToReplaceId, modRes.fwd(R.anim.ic_sysbar_recent_button_trans));
+        //resparam.res.setReplacement(drawableToReplaceId, modRes.fwd(R.drawable.ic_sysbar_recent_button_trans));
 
         XC_LayoutInflated inflateHook = new XC_LayoutInflated() {
             private void swapButtons(View navbar, XResources resources, boolean isLandscape) {
@@ -50,12 +65,20 @@ public class RecentAppsKey {
                 buttonToRemove.setTag(null);
                 buttonToRemove.setVisibility(View.GONE);
 
+                // we also move the recent apps button so that it's adjacent to the view we're removing
+                // otherwise the layout gets fucked
+                ViewGroup parent = (ViewGroup)recentsButton.getParent();
+                int idx = parent.indexOfChild(buttonToRemove);
+                parent.removeView(recentsButton);
+                parent.addView(recentsButton, idx+1);
+
                 // If we're replacing the notification view, force the dummy view visibility to GONE
                 if (replacementButtonName.equals("notification")) {
                     View dummyView = navbar.findViewById(resources.getIdentifier("notification_dummy", "id", "com.android.systemui"));
                     dummyView.setVisibility(View.GONE);
                 }
 
+                /*
                 // If we're in landscape, we also want to muck with the layout a bit.
                 // There's an invisible spacer view that comes immediately before the recent apps button
                 // It throws off the spacing, and should come immediately after the recent apps button
@@ -68,7 +91,7 @@ public class RecentAppsKey {
                     // since we removed a view, recentsIndex is now *after* the recents button, as all following views
                     // had their indices shifted down by one
                     parent.addView(spacer, recentsIndex);
-                }
+                }*/
             }
 
             @Override
@@ -80,6 +103,7 @@ public class RecentAppsKey {
 
                 swapButtons(portrait, liparam.res, false);
                 swapButtons(landscape, liparam.res, true);
+
             }
         };
 
@@ -111,7 +135,7 @@ public class RecentAppsKey {
             return;
         }
 
-        Class<?> navigationBarViewClass =
+        final Class<?> navigationBarViewClass =
                 findClass("com.android.systemui.statusbar.phone.NavigationBarView", lpparam.classLoader);
         Constructor<?> navigationBarViewConstructor =
                 findConstructorExact(navigationBarViewClass, Context.class, AttributeSet.class);
@@ -268,5 +292,28 @@ public class RecentAppsKey {
                 recentsButton.setOnTouchListener(touchListener);
             }
         });
+
+        // After hook updateButtonsUsingResources() to set the drawable for the recents key to the RotateDrawable
+        // we bundle in our mod resources, if we're in portrait with a transparent statusbar.
+        // This allows the recents key to rotate with the other buttons in the camera app
+        findAndHookMethod(navigationBarViewClass, "updateButtonsUsingResources", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                Context context = (Context)getObjectField(param.thisObject, "mContext");
+
+
+                Resources res = context.getResources();
+                int recentsId = res.getIdentifier("recent_apps", "id", "com.android.systemui");
+                String replacementAnimName = "ic_sysbar_" + keyToReplace + "_button_trans";
+                int animId = res.getIdentifier(replacementAnimName, "anim", "com.android.systemui");
+                XposedBridge.log("Calling setButtonImageUsingResource for recents key using animation " + replacementAnimName + " (0x" + animId + ")");
+                callMethod(param.thisObject, "setButtonImageUsingResource", recentsId, animId);
+
+                Object keyRotation = getObjectField(param.thisObject, "mKeyRotation");
+                callMethod(keyRotation, "setKeyList", callMethod(param.thisObject, "getKeyList"));
+            }
+        });
+
+
     }
 }

@@ -1,5 +1,6 @@
 package org.napora.Xposed.G2;
 
+import android.content.res.XModuleResources;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
@@ -16,17 +17,22 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  */
 public class EntryPoint implements IXposedHookInitPackageResources, IXposedHookZygoteInit, IXposedHookLoadPackage
 {
-
+    private static String MODULE_PATH = null;
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
         if (resparam.packageName.equals("com.android.systemui")) {
             if (Settings.recentAppsKeyMod()) {
-                RecentAppsKey.hookSystemUIResources(resparam);
+                XModuleResources modRes = XModuleResources.createInstance(MODULE_PATH, resparam.res);
+                RecentAppsKey.hookSystemUIResources(resparam, modRes);
             }
 
             if (Settings.hideCarrierTextInNavigationPanel()) {
                 XposedBridge.log("Hiding carrier text in navigation panel");
                 Declutter.hideCarrierTextInNavigationPanel(resparam);
+            }
+
+            if (Settings.blackStatusBarTheme()) {
+                Themes.blackStatusBar(resparam);
             }
         }
 
@@ -34,6 +40,12 @@ public class EntryPoint implements IXposedHookInitPackageResources, IXposedHookZ
             && Settings.hideCarrierTextInLockScreen()) {
             XposedBridge.log("Hiding Carrier text in lock screen");
             Declutter.hideCarrierTextInLockscreen(resparam);
+        }
+
+        if (resparam.packageName.equals("com.lge.systemui.theme.lovelypink") &&
+            Settings.blackNavBarTheme()) {
+            XposedBridge.log("Replacing pink navbar theme with black");
+            Themes.blackNavBar(resparam, XModuleResources.createInstance(MODULE_PATH, resparam.res));
         }
     }
 
@@ -72,6 +84,8 @@ public class EntryPoint implements IXposedHookInitPackageResources, IXposedHookZ
 
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
+        MODULE_PATH = startupParam.modulePath;
+
         if (Settings.enableActionBarOverflowMenu()) {
             ActionBarOverflowMenu.hookZygote(startupParam);
         }

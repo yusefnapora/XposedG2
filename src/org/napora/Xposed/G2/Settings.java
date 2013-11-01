@@ -79,6 +79,14 @@ public class Settings {
     }
 
     public static boolean hideClockAMPM() {
-        return true; // FIXME
+        return getSharedPrefs().getBoolean("pref_key_hide_am_pm", false);
+    }
+
+    public static boolean blackNavBarTheme() {
+        return getSharedPrefs().getBoolean("pref_key_black_status_bar", false);
+    }
+
+    public static boolean blackStatusBarTheme() {
+        return getSharedPrefs().getBoolean("pref_key_black_nav_bar", false);
     }
 }

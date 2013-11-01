@@ -32,6 +32,24 @@
                 android:summary="@string/pref_action_bar_overflow_summary"
                 android:defaultValue="false"/>
     </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/pref_appearance_category"
+            android:key="@string/pref_key_appearance_category">
+        <CheckBoxPreference
+            android:key="@string/pref_key_hide_am_pm"
+            android:title="@string/pref_hide_am_pm"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="@string/pref_key_black_status_bar"
+                android:title="@string/pref_black_status_bar"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="@string/pref_key_black_nav_bar"
+                android:title="@string/pref_black_nav_bar"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="@string/pref_hide_carrier_title"
         android:key="@string/pref_key_hide_carrier_category">
@@ -44,6 +62,7 @@
                 android:title="@string/pref_hide_carrier_in_lockscreen"
                 android:defaultValue="false"/>
     </PreferenceCategory>
+
     <PreferenceCategory
         android:title="@string/pref_status_bar_title"
         android:key="@string/pref_key_status_bar_icons">

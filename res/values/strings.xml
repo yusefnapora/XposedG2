@@ -26,7 +26,15 @@
     <string name="pref_hide_gps_icon">No GPS icon</string>
     <string name="pref_hide_mobile_data_icon">No 4G icon while on WiFi</string>
     <string name="pref_hide_mobile_data_icon_summary">Hides the Mobile Data icon, only when connected to WiFi</string>
+    <string name="pref_appearance_category">Appearance</string>
+    <string name="pref_hide_am_pm">Hide AM/PM in Status Bar</string>
+    <string name="pref_black_status_bar">Black Status Bar</string>
+    <string name="pref_black_nav_bar">Change Pink NavBar to Black</string>
 
+    <string name="toast_reboot_for_changes">Changes will take effect after reboot.</string>
+
+
+    <!-- Do not translate! -->
     <string name="pref_value_long_press_home_default">default</string>
     <string name="pref_value_long_press_home_menu">menu</string>
     <string name="pref_value_long_press_home_notification">notification</string>
@@ -39,8 +47,11 @@
     <string name="pref_value_navbar_size_mid">mid</string>
     <string name="pref_value_navbar_size_tiny">tiny</string>
 
-    <string name="toast_reboot_for_changes">Changes will take effect after reboot.</string>
 
+    <string name="pref_key_appearance_category">pref_key_appearance_category</string>
+    <string name="pref_key_hide_am_pm">pref_key_hide_am_pm</string>
+    <string name="pref_key_black_status_bar">pref_key_black_status_bar</string>
+    <string name="pref_key_black_nav_bar">pref_key_black_nav_bar</string>
     <string name="pref_key_nav_bar_category">pref_key_nav_bar_category</string>
     <string name="pref_key_recent_apps_mod">pref_key_recent_apps_mod</string>
     <string name="pref_key_long_press_home_behavior">pref_key_long_press_home_behavior</string>
