@@ -9,7 +9,7 @@
     <string name="pref_recent_apps_menu_key">Replace Menu Key with Recent Apps</string>
     <string name="pref_recent_apps_disabled">Don\'t Use Recent Apps Key (Default)</string>
     <string name="pref_recent_apps_notification_key">Replace Notification Toggle Key with Recent Apps</string>
-    <string name="pref_nav_bar_size">Nav Bar Size</string>
+    <string name="pref_nav_bar_size">Navigation Bar Size</string>
     <string name="pref_nav_bar_size_default">Default - 48dip</string>
     <string name="pref_nav_bar_size_mid">Medium - 36 dip</string>
     <string name="pref_nav_bar_size_tiny">Tiny - 24 dip</string>
