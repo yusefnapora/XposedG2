@@ -21,22 +21,21 @@ public class Settings {
     }
 
     public static boolean recentAppsKeyMod() {
-        return getSharedPrefs().getBoolean("pref_menu_to_recents", false);
+        return !recentAppsButtonReplacement().equals("default");
     }
 
     // Which button does the recent apps key replace?
     // //Returns the name of a resource id as referenced in navigation_bar.xml
     public static String recentAppsButtonReplacement() {
-        // FIXME - need prefs for this
-        return "menu";
+        return getSharedPrefs().getString("pref_key_recent_apps_mod", "default");
     }
 
     public static boolean enableActionBarOverflowMenu() {
-        return getSharedPrefs().getBoolean("pref_action_bar_overflow", false);
+        return getSharedPrefs().getBoolean("pref_key_action_bar_overflow", false);
     }
 
     public static String longPressHomeBehavior() {
-        return getSharedPrefs().getString("pref_long_press_home_behavior", "default");
+        return getSharedPrefs().getString("pref_key_long_press_home_behavior", "default");
     }
 
     public static boolean longPressHomeForMenu() {
@@ -48,26 +47,38 @@ public class Settings {
     }
 
     public static boolean hideNFCIcon() {
-        return getSharedPrefs().getBoolean("pref_hide_nfc_icon", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_nfc_icon", false);
     }
 
     public static boolean hideHeadsetIcon() {
-        return getSharedPrefs().getBoolean("pref_hide_headset_icon", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_headset_icon", false);
     }
 
     public static boolean hideGPSIcon() {
-        return getSharedPrefs().getBoolean("pref_hide_gps_icon", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_gps_icon", false);
     }
 
     public static boolean hideMobileDataWhenWifiConnected() {
-        return getSharedPrefs().getBoolean("pref_hide_mobile_data_icon", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_mobile_data_icon", false);
     }
 
     public static boolean hideCarrierTextInNavigationPanel() {
-        return getSharedPrefs().getBoolean("pref_hide_carrier_in_panel", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_carrier_in_panel", false);
     }
 
     public static boolean hideCarrierTextInLockScreen() {
-        return getSharedPrefs().getBoolean("pref_hide_carrier_in_lockscreen", false);
+        return getSharedPrefs().getBoolean("pref_key_hide_carrier_in_lockscreen", false);
+    }
+
+    public static boolean changeNavBarSize() {
+        return !navBarSize().equals("default");
+    }
+
+    public static String navBarSize() {
+        return getSharedPrefs().getString("pref_key_nav_bar_size", "default");
+    }
+
+    public static boolean hideClockAMPM() {
+        return true; // FIXME
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="navbar_height_mid">36dip</dimen>
+    <dimen name="navbar_width_mid">31.5dip</dimen>
+    <dimen name="navbar_height_tiny">24dip</dimen>
+    <dimen name="navbar_width_tiny">21dip</dimen>
+</resources>

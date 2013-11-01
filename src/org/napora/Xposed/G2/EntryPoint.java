@@ -16,6 +16,7 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  */
 public class EntryPoint implements IXposedHookInitPackageResources, IXposedHookZygoteInit, IXposedHookLoadPackage
 {
+
     @Override
     public void handleInitPackageResources(XC_InitPackageResources.InitPackageResourcesParam resparam) throws Throwable {
         if (resparam.packageName.equals("com.android.systemui")) {
@@ -72,11 +73,18 @@ public class EntryPoint implements IXposedHookInitPackageResources, IXposedHookZ
     @Override
     public void initZygote(StartupParam startupParam) throws Throwable {
         if (Settings.enableActionBarOverflowMenu()) {
-            EnableActionBarOverflowMenu.hookZygote(startupParam);
+            ActionBarOverflowMenu.hookZygote(startupParam);
         }
 
         if (!Settings.longPressHomeBehavior().equals("default")) {
             LongPressHomeBehavior.hookZygote(startupParam);
+        }
+
+        if (Settings.hideClockAMPM()) {
+            Declutter.hideClockAMPMText(startupParam);
+        }
+        if (Settings.changeNavBarSize()) {
+            NavBarSize.changeNavBarSize(startupParam);
         }
     }
 }

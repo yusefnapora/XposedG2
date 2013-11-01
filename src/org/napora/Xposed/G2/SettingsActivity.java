@@ -17,8 +17,11 @@ import android.widget.Toast;
  */
 public class SettingsActivity extends Activity  {
 
+
+
     public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         private boolean mShowedRebootToast = false;
+
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -28,8 +31,8 @@ public class SettingsActivity extends Activity  {
             addPreferencesFromResource(R.xml.preferences);
             PreferenceManager.getDefaultSharedPreferences(getActivity()).
                     registerOnSharedPreferenceChangeListener(this);
-
         }
+
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -39,7 +42,9 @@ public class SettingsActivity extends Activity  {
                 mShowedRebootToast = true;
             }
 
-            if (key.equals("pref_long_press_home_behavior")) {
+            if (key.equals(getString(R.string.pref_key_long_press_home_behavior)) ||
+                key.equals(getString(R.string.pref_key_recent_apps_mod)) ||
+                key.equals(getString(R.string.pref_key_nav_bar_size))) {
                 ListPreference pref = (ListPreference)findPreference(key);
                 pref.setSummary(pref.getEntry());
             }

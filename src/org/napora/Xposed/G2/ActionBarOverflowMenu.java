@@ -13,7 +13,7 @@ import static de.robv.android.xposed.XposedHelpers.*;
  * Time: 6:13 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EnableActionBarOverflowMenu {
+public class ActionBarOverflowMenu {
     public static void hookZygote(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XposedBridge.log("Enabling ActionBar overflow menu");
 

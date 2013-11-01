@@ -10,4 +10,25 @@
         <item>@string/pref_value_long_press_home_menu</item>
         <item>@string/pref_value_long_press_home_notification</item>
     </string-array>
+    <string-array name="pref_recent_apps_key_entries">
+        <item>@string/pref_recent_apps_disabled</item>
+        <item>@string/pref_recent_apps_menu_key</item>
+        <item>@string/pref_recent_apps_notification_key</item>
+    </string-array>
+    <string-array name="pref_recent_apps_key_values">
+        <item>@string/pref_value_recent_apps_default</item>
+        <item>@string/pref_value_recent_apps_menu</item>
+        <item>@string/pref_value_recent_apps_notification</item>
+    </string-array>
+    <string-array name="pref_navbar_size_entries">
+        <item>@string/pref_nav_bar_size_default</item>
+        <item>@string/pref_nav_bar_size_mid</item>
+        <item>@string/pref_nav_bar_size_tiny</item>
+    </string-array>
+
+    <string-array name="pref_navbar_size_values">
+        <item>@string/pref_value_navbar_size_default</item>
+        <item>@string/pref_value_navbar_size_mid</item>
+        <item>@string/pref_value_navbar_size_tiny</item>
+    </string-array>
 </resources>

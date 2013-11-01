@@ -3,14 +3,15 @@ package org.napora.Xposed.G2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.XResources;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XposedBridge;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
 
 import static de.robv.android.xposed.XposedHelpers.*;
 
@@ -92,4 +93,7 @@ public class Declutter  {
         resparam.res.setReplacement("com.lge.lockscreen", "bool", "config_feature_display_carrier_string", false);
     }
 
+    public static void hideClockAMPMText(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
+        XResources.setSystemWideReplacement("android", "string", "twelve_hour_time_format", "h:mm");
+    }
 }

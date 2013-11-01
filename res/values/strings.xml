@@ -5,9 +5,16 @@
     <string name="pref_hide_carrier_in_panel">In Notification Panel</string>
     <string name="pref_hide_carrier_in_lockscreen">At Lock Screen</string>
     <string name="pref_nav_bar_title">Navigation Bar</string>
-    <string name="pref_menu_to_recents">Menu -> Recent Apps</string>
-    <string name="pref_menu_to_recents_summary">Replace the Menu Key with Recent Apps Key.  Highly recommended that you choose at least one of \"Enable ActionBar overflow menu\" or \"Long-Press Home for Menu\", otherwise you won\'t be able to bring up the menu at all!</string>
-    <string name="pref_action_bar_overflow">\u22EE ActionBar Overflow Menu</string>
+    <string name="pref_recent_apps_mod">Recent Apps Key</string>
+    <string name="pref_recent_apps_menu_key">Replace Menu Key with Recent Apps</string>
+    <string name="pref_recent_apps_disabled">Don\'t Use Recent Apps Key (Default)</string>
+    <string name="pref_recent_apps_notification_key">Replace Notification Toggle Key with Recent Apps</string>
+    <string name="pref_nav_bar_size">Nav Bar Size</string>
+    <string name="pref_nav_bar_size_default">Default - 48dip</string>
+    <string name="pref_nav_bar_size_mid">Medium - 36 dip</string>
+    <string name="pref_nav_bar_size_tiny">Tiny - 24 dip</string>
+
+    <string name="pref_action_bar_overflow">ActionBar Overflow Menu</string>
     <string name="pref_action_bar_overflow_summary">Be aware that this will add a big ugly menu button to some stock apps (Dialer, Settings, etc)</string>
     <string name="pref_long_press_home_behavior">Long-press on Home Behavior</string>
     <string name="pref_long_press_home_for_recents">Recent Apps (Default)</string>
@@ -19,9 +26,33 @@
     <string name="pref_hide_gps_icon">No GPS icon</string>
     <string name="pref_hide_mobile_data_icon">No 4G icon while on WiFi</string>
     <string name="pref_hide_mobile_data_icon_summary">Hides the Mobile Data icon, only when connected to WiFi</string>
-    <string name="toast_reboot_for_changes">Changes will take effect after reboot.</string>
 
     <string name="pref_value_long_press_home_default">default</string>
     <string name="pref_value_long_press_home_menu">menu</string>
     <string name="pref_value_long_press_home_notification">notification</string>
+
+    <string name="pref_value_recent_apps_default">default</string>
+    <string name="pref_value_recent_apps_menu">menu</string>
+    <string name="pref_value_recent_apps_notification">notification</string>
+
+    <string name="pref_value_navbar_size_default">default</string>
+    <string name="pref_value_navbar_size_mid">mid</string>
+    <string name="pref_value_navbar_size_tiny">tiny</string>
+
+    <string name="toast_reboot_for_changes">Changes will take effect after reboot.</string>
+
+    <string name="pref_key_nav_bar_category">pref_key_nav_bar_category</string>
+    <string name="pref_key_recent_apps_mod">pref_key_recent_apps_mod</string>
+    <string name="pref_key_long_press_home_behavior">pref_key_long_press_home_behavior</string>
+    <string name="pref_key_nav_bar_size">pref_key_nav_bar_size</string>
+    <string name="pref_key_nav_bar_size_pixels">pref_key_nav_bar_size_pixels</string>
+    <string name="pref_key_action_bar_overflow">pref_key_action_bar_overflow</string>
+    <string name="pref_key_hide_carrier_category">pref_key_hide_carrier_category</string>
+    <string name="pref_key_hide_carrier_in_panel">pref_key_hide_carrier_in_panel</string>
+    <string name="pref_key_hide_carrier_in_lockscreen">pref_key_hide_carrier_in_lockscreen</string>
+    <string name="pref_key_status_bar_icons">pref_key_status_bar_icons</string>
+    <string name="pref_key_hide_nfc_icon">pref_key_hide_nfc_icon</string>
+    <string name="pref_key_hide_headset_icon">pref_key_hide_headset_icon</string>
+    <string name="pref_key_hide_gps_icon">pref_key_hide_gps_icon</string>
+    <string name="pref_key_hide_mobile_data_icon">pref_key_hide_mobile_data_icon</string>
 </resources>
