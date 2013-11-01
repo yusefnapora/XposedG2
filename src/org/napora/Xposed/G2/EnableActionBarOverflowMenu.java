@@ -1,10 +1,10 @@
 package org.napora.Xposed.G2;
 
-import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
-
 import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
+
+import static de.robv.android.xposed.XposedHelpers.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,10 +13,8 @@ import de.robv.android.xposed.XposedBridge;
  * Time: 6:13 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EnableActionBarOverflowMenu implements IXposedHookZygoteInit {
-    @Override
-    public void initZygote(StartupParam startupParam) throws Throwable {
-        if (!Settings.enableActionBarOverflowMenu()) return;
+public class EnableActionBarOverflowMenu {
+    public static void hookZygote(IXposedHookZygoteInit.StartupParam startupParam) throws Throwable {
         XposedBridge.log("Enabling ActionBar overflow menu");
 
         findAndHookMethod("android.view.ViewConfiguration", null, "hasPermanentMenuKey", new XC_MethodHook() {

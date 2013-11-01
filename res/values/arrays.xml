@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_long_press_behaviors">
+        <item>@string/pref_long_press_home_for_recents</item>
+        <item>@string/pref_long_press_home_for_menu</item>
+        <item>@string/pref_long_press_home_for_notification</item>
+    </string-array>
+    <string-array name="pref_long_press_behavior_values">
+        <item>@string/pref_value_long_press_home_default</item>
+        <item>@string/pref_value_long_press_home_menu</item>
+        <item>@string/pref_value_long_press_home_notification</item>
+    </string-array>
+</resources>

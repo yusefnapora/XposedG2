@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">XposedG2RecentApps</string>
+    <string name="app_name">LG G2 Mods</string>
+    <string name="pref_hide_carrier_title">Hide Carrier Labels</string>
+    <string name="pref_hide_carrier_in_panel">In Notification Panel</string>
+    <string name="pref_hide_carrier_in_lockscreen">At Lock Screen</string>
+    <string name="pref_nav_bar_title">Navigation Bar</string>
+    <string name="pref_menu_to_recents">Menu -> Recent Apps</string>
+    <string name="pref_menu_to_recents_summary">Replace the Menu Key with Recent Apps Key.  Highly recommended that you choose at least one of \"Enable ActionBar overflow menu\" or \"Long-Press Home for Menu\", otherwise you won\'t be able to bring up the menu at all!</string>
+    <string name="pref_action_bar_overflow">\u22EE ActionBar Overflow Menu</string>
+    <string name="pref_action_bar_overflow_summary">Be aware that this will add a big ugly menu button to some stock apps (Dialer, Settings, etc)</string>
+    <string name="pref_long_press_home_behavior">Long-press on Home Behavior</string>
+    <string name="pref_long_press_home_for_recents">Recent Apps (Default)</string>
+    <string name="pref_long_press_home_for_menu">Menu Key</string>
+    <string name="pref_long_press_home_for_notification">Toggle Notification Panel</string>
+    <string name="pref_status_bar_title">Status Bar Icons</string>
+    <string name="pref_hide_nfc_icon">No NFC icon</string>
+    <string name="pref_hide_headset_icon">No Headset icon</string>
+    <string name="pref_hide_gps_icon">No GPS icon</string>
+    <string name="pref_hide_mobile_data_icon">No 4G icon while on WiFi</string>
+    <string name="pref_hide_mobile_data_icon_summary">Hides the Mobile Data icon, only when connected to WiFi</string>
+    <string name="toast_reboot_for_changes">Changes will take effect after reboot.</string>
+
+    <string name="pref_value_long_press_home_default">default</string>
+    <string name="pref_value_long_press_home_menu">menu</string>
+    <string name="pref_value_long_press_home_notification">notification</string>
 </resources>

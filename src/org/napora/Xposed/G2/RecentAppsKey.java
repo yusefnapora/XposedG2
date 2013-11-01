@@ -1,41 +1,101 @@
-package org.napora.Xposed.G2.RecentApps;
+package org.napora.Xposed.G2;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.XResources;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
-import de.robv.android.xposed.IXposedHookLoadPackage;
+import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import org.napora.Xposed.G2.Settings;
+import de.robv.android.xposed.callbacks.XC_LayoutInflated;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 import static de.robv.android.xposed.XposedHelpers.*;
-import static de.robv.android.xposed.XposedHelpers.callStaticMethod;
-import static de.robv.android.xposed.XposedHelpers.findMethodExact;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 
 /**
- * Created with IntelliJ IDEA.
- * User: yusef
- * Date: 10/30/13
- * Time: 7:38 AM
- * To change this template use File | Settings | File Templates.
+ * Replace either the Menu key or Notification key with Recent Apps
  */
-public class ModNavBar implements IXposedHookLoadPackage {
-    private int getResourceId(String resName, Context context) {
-        Resources res = context.getResources();
-        return res.getIdentifier(resName, "id", "com.android.systemui");
+public class RecentAppsKey {
+    public static void hookSystemUIResources(InitPackageResourcesParam resparam)
+            throws Throwable {
+        if (!resparam.packageName.equals("com.android.systemui")) return;
+
+        // Replace either the menu key or the notification key with recent apps
+        final String replacementButtonName = Settings.recentAppsButtonReplacement();
+        XposedBridge.log("Replacing " + replacementButtonName + " with recent_apps");
+
+        XC_LayoutInflated inflateHook = new XC_LayoutInflated() {
+            private void swapButtons(View navbar, XResources resources, boolean isLandscape) {
+                View buttonToRemove = navbar.findViewById(
+                        resources.getIdentifier(replacementButtonName, "id", "com.android.systemui"));
+
+                View recentsButton = navbar.findViewById(
+                        resources.getIdentifier("recent_apps", "id", "com.android.systemui"));
+
+                //  we need to pull the layout_gravity, layout_width and tag from the button we're replacing
+                // and add them to the recents button
+                recentsButton.setLayoutParams(buttonToRemove.getLayoutParams());
+                recentsButton.setTag(buttonToRemove.getTag());
+                recentsButton.setVisibility(View.VISIBLE);
+                XposedBridge.log("Set recent_apps button tag to " + recentsButton.getTag());
+
+                // Got to remove the tag from the button we're replacing and set its visibility to GONE
+                buttonToRemove.setTag(null);
+                buttonToRemove.setVisibility(View.GONE);
+
+                // If we're replacing the notification view, force the dummy view visibility to GONE
+                if (replacementButtonName.equals("notification")) {
+                    View dummyView = navbar.findViewById(resources.getIdentifier("notification_dummy", "id", "com.android.systemui"));
+                    dummyView.setVisibility(View.GONE);
+                }
+
+                // If we're in landscape, we also want to muck with the layout a bit.
+                // There's an invisible spacer view that comes immediately before the recent apps button
+                // It throws off the spacing, and should come immediately after the recent apps button
+                // Make it so.
+                if (isLandscape) {
+                    ViewGroup parent = (ViewGroup)recentsButton.getParent();
+                    int recentsIndex = parent.indexOfChild(recentsButton);
+                    View spacer = parent.getChildAt(recentsIndex-1);
+                    parent.removeView(spacer);
+                    // since we removed a view, recentsIndex is now *after* the recents button, as all following views
+                    // had their indices shifted down by one
+                    parent.addView(spacer, recentsIndex);
+                }
+            }
+
+            @Override
+            public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+                View portrait = liparam.view.findViewById(
+                        liparam.res.getIdentifier("rot0", "id", "com.android.systemui"));
+                View landscape = liparam.view.findViewById(
+                        liparam.res.getIdentifier("rot90", "id", "com.android.systemui"));
+
+                swapButtons(portrait, liparam.res, false);
+                swapButtons(landscape, liparam.res, true);
+            }
+        };
+
+
+        resparam.res.hookLayout("com.android.systemui", "layout", "navigation_bar", inflateHook);
+        try {
+            // navigation_bar_with_cursor only exists on AT&T models (possibly international too)
+            resparam.res.hookLayout("com.android.systemui", "layout", "navigation_bar_with_cursor", inflateHook);
+        } catch (Exception e) {
+            XposedBridge.log("Didn't find navigation_bar_with_cursor layout.  Probably a verizon device");
+        }
     }
 
-    @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+
+    public static void hookSystemUICode(LoadPackageParam lpparam) throws Throwable {
         if (!lpparam.packageName.equals("com.android.systemui")) return;
-        if (!Settings.recentAppsKeyMod()) return;
 
         final String keyToReplace = Settings.recentAppsButtonReplacement();
         final int keycodeToReplace;
@@ -83,7 +143,8 @@ public class ModNavBar implements IXposedHookLoadPackage {
 
                 // get the id of the recent apps key
                 Context c = (Context)param.args[0];
-                int recentAppsID = getResourceId("recent_apps", c);
+                Resources res = c.getResources();
+                int recentAppsID = res.getIdentifier("recent_apps", "id", "com.android.systemui");
 
                 // and the id of the content description string resource
                 int recentAppsContentDescId = c.getResources().getIdentifier("accessibility_recent", "string", "com.android.systemui");
@@ -139,7 +200,8 @@ public class ModNavBar implements IXposedHookLoadPackage {
                     Object navBarView = getObjectField(param.thisObject, "mNavigationBarView");
                     View recentsButtonView = (View)callMethod(navBarView, "getRecentsButton");
 
-                    int defaultButtonId = getResourceId("ic_sysbar_recent_button", context);
+                    int defaultButtonId = context.getResources()
+                            .getIdentifier("ic_sysbar_recent_button", "id", "com.android.systemui");
                     @SuppressWarnings("unchecked")
                     Map<String, Integer> tagMap = (Map<String,Integer>)callMethod(param.thisObject, "getTagMap");
                     int tag;
@@ -157,9 +219,10 @@ public class ModNavBar implements IXposedHookLoadPackage {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Context context = (Context)getObjectField(param.thisObject, "mContext");
+                    Resources res = context.getResources();
                     Boolean isPortrait = (Boolean)isPortraitMethod.invoke(null, context);
-                    int recentButtonId = getResourceId("recent_apps", context);
-                    int defaultButtonId = getResourceId("ic_sysbar_recent_button", context);
+                    int recentButtonId = res.getIdentifier("recent_apps", "id", "com.android.systemui");
+                    int defaultButtonId = res.getIdentifier("ic_sysbar_recent_button", "id", "com.android.systemui");
 
                     Object themeChanger = getObjectField(param.thisObject, "mThemeChanger");
                     @SuppressWarnings("unchecked")

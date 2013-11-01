@@ -1,19 +1,18 @@
 package org.napora.Xposed.G2;
 
 
-import static de.robv.android.xposed.XposedHelpers.*;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Message;
 import android.view.View;
-import android.widget.TextView;
-import de.robv.android.xposed.IXposedHookLoadPackage;
-import de.robv.android.xposed.IXposedHookInitPackageResources;
+import android.view.ViewGroup;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
-import de.robv.android.xposed.callbacks.XC_InitPackageResources;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
+import de.robv.android.xposed.callbacks.XC_LayoutInflated;
+import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
+import de.robv.android.xposed.callbacks.XC_InitPackageResources.InitPackageResourcesParam;
+
+import static de.robv.android.xposed.XposedHelpers.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,9 +21,9 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
  * Time: 2:56 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Declutter implements IXposedHookLoadPackage {
+public class Declutter  {
 
-    private void hideGPSIcon(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hideGPSIcon(LoadPackageParam lpparam) throws Throwable {
         findAndHookMethod("com.lge.systemui.LGPhoneStatusBarPolicy", lpparam.classLoader,
                 "updateGPSPrivacySetting", new XC_MethodHook() {
             @Override
@@ -35,7 +34,7 @@ public class Declutter implements IXposedHookLoadPackage {
         });
     }
 
-    private void hideHeadsetIcon(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hideHeadsetIcon(LoadPackageParam lpparam) throws Throwable {
         findAndHookMethod("com.lge.systemui.LGPhoneStatusBarPolicy", lpparam.classLoader,
                 "updateHeadset", Intent.class, new XC_MethodHook() {
             @Override
@@ -47,7 +46,7 @@ public class Declutter implements IXposedHookLoadPackage {
     }
 
 
-    private void hideMobileDataIconWhenWifiConnected(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hideMobileDataIconWhenWifiConnected(LoadPackageParam lpparam) throws Throwable {
         findAndHookMethod("com.android.systemui.statusbar.policy.NetworkController", lpparam.classLoader,
                 "updateDataNetType", new XC_MethodHook() {
             @Override
@@ -61,52 +60,8 @@ public class Declutter implements IXposedHookLoadPackage {
         });
     }
 
-    private void hideCarrierTextInNavigationPanel(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
 
-        findAndHookMethod("com.android.systemui.statusbar.phone.PhoneStatusBar", lpparam.classLoader,
-                "makeStatusBarView",  new XC_MethodHook() {
-
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                View carrierLabel = (View) getObjectField(param.thisObject, "mCarrierLabel");
-                carrierLabel.setVisibility(View.GONE);
-                setBooleanField(param.thisObject, "mShowCarrierInPanel", false);
-            }
-        });
-
-        findAndHookMethod("com.android.systemui.statusbar.phone.PhoneStatusBar", lpparam.classLoader,
-                "updateCarrierLabelVisibility", Boolean.TYPE, new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                setBooleanField(param.thisObject, "mShowCarrierInPanel", false);
-            }
-        });
-    }
-
-    private void hookSystemUI(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-
-        if (Settings.hideGPSIcon()) {
-            XposedBridge.log("Hiding GPS status bar icon");
-            hideGPSIcon(lpparam);
-        }
-
-        if (Settings.hideHeadsetIcon()) {
-            XposedBridge.log("Hiding headset status bar icon");
-            hideHeadsetIcon(lpparam);
-        }
-
-        if (Settings.hideMobileDataWhenWifiConnected()) {
-            XposedBridge.log("Hiding mobile data status bar icon when wifi is connected");
-            hideMobileDataIconWhenWifiConnected(lpparam);
-        }
-
-        if (Settings.hideCarrierTextInNavigationPanel()) {
-            XposedBridge.log("Hiding carrier text in navigation panel");
-            hideCarrierTextInNavigationPanel(lpparam);
-        }
-    }
-
-    private void hookNFC(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
+    public static void hideNFCIcon(LoadPackageParam lpparam) throws Throwable {
         findAndHookMethod("com.android.nfc.LNfcCommonMethod$LNfcServiceIconHandler", lpparam.classLoader,
                 "handleMessage", Message.class, new XC_MethodHook() {
             @Override
@@ -120,16 +75,21 @@ public class Declutter implements IXposedHookLoadPackage {
         });
     }
 
-    @Override
-    public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
-        if (lpparam.packageName.equals("com.android.systemui")) {
-            hookSystemUI(lpparam);
-        } else if (lpparam.packageName.equals("com.android.nfc")) {
-            if (Settings.hideNFCIcon()) {
-                XposedBridge.log("Hiding NFC status bar icon");
-                hookNFC(lpparam);
-            }
-        }
+    public static void hideCarrierTextInNavigationPanel(InitPackageResourcesParam resparam) throws Throwable {
+        resparam.res.hookLayout("com.android.systemui", "layout", "super_status_bar",
+                new XC_LayoutInflated() {
+                    @Override
+                    public void handleLayoutInflated(LayoutInflatedParam liparam) throws Throwable {
+                        View carrierLabel = liparam.view.findViewById(
+                                liparam.res.getIdentifier("carrier_label", "id", "com.android.systemui"));
+                        ViewGroup parent = (ViewGroup)carrierLabel.getParent();
+                        parent.removeView(carrierLabel);
+                    }
+                });
+    }
+
+    public static void hideCarrierTextInLockscreen(InitPackageResourcesParam resparam) throws Throwable {
+        resparam.res.setReplacement("com.lge.lockscreen", "bool", "config_feature_display_carrier_string", false);
     }
 
 }

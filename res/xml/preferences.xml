@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="pref_menu_to_recents"
+        android:title="@string/pref_menu_to_recents"
+        android:summary="@string/pref_menu_to_recents_summary"
+        android:defaultValue="false"/>
+    <CheckBoxPreference
+        android:key="pref_action_bar_overflow"
+        android:title="@string/pref_action_bar_overflow"
+        android:summary="@string/pref_action_bar_overflow_summary"
+        android:defaultValue="false"/>
+    <ListPreference
+        android:key="pref_long_press_home_behavior"
+        android:title="@string/pref_long_press_home_behavior"
+        android:summary="%s"
+        android:entries="@array/pref_long_press_behaviors"
+        android:entryValues="@array/pref_long_press_behavior_values"
+        android:defaultValue="recent_apps"/>
+    <PreferenceCategory
+        android:title="@string/pref_hide_carrier_title"
+        android:key="pref_key_appearance_category">
+        <CheckBoxPreference
+            android:key="pref_hide_carrier_in_panel"
+            android:title="@string/pref_hide_carrier_in_panel"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="pref_hide_carrier_in_lockscreen"
+                android:title="@string/pref_hide_carrier_in_lockscreen"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_status_bar_title"
+        android:key="pref_key_status_bar_icons">
+        <CheckBoxPreference
+                android:key="pref_hide_nfc_icon"
+                android:title="@string/pref_hide_nfc_icon"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="pref_hide_headset_icon"
+                android:title="@string/pref_hide_headset_icon"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="pref_hide_gps_icon"
+                android:title="@string/pref_hide_gps_icon"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:key="pref_hide_mobile_data_icon"
+                android:title="@string/pref_hide_mobile_data_icon"
+                android:summary="@string/pref_hide_mobile_data_icon_summary"
+                android:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
